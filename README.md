@@ -1,5 +1,5 @@
 # xtabular
-A simple python package to colorize LaTeX tables.
+A simple python package to colorize the cells of LaTeX tables.
 
 ```$ python xtabular.py -h
 usage: xtabular.py [-h] -f FILE -i column row -c COLOR
