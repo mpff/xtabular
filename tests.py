@@ -94,18 +94,11 @@ class ColorizeTest(unittest.TestCase):
 
     def test_indices_outside_of_table_fails_gracefully(self):
         indices_fail = [(4,1), (2,4), (4,4)]
+        for idx in indices_fail:
+            with self.assertRaises(Exception) as error:
+                self.table.colorize(idx[0],idx[1],"red")
+            self.assertEqual(str(error.exception), "Cell index out of range.")
         return True
-
-
-    def test_noninteger_indices_fails_gracefully(self):
-        indices_fail = [(4.1,1), (2,4), "banana"]
-        return True
-
-
-    def test_nonhex_colors_fails_gracefully(self):
-        colors_fail = ["banana", "#FF00000", "FF0000"]
-        return True
-
 
 
 if __name__ == '__main__':
