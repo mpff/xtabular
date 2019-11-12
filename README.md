@@ -1,7 +1,8 @@
 # xtabular
 A simple python package to colorize the cells of LaTeX tables.
 
-```usage: xtabular.py [-h] -f FILE [-c COLUMN] [-r ROW] -col COLOR
+```
+usage: xtabular.py [-h] -f FILE [-c COLUMN] [-r ROW] -col COLOR
 
 This is a simple python script to colorize LaTex tables. It uses the xcolor
 and colortbl LaTeX packages. Import them by adding '\usepackage{xcolor,
@@ -16,4 +17,5 @@ optional arguments:
                         Colum index (starts at 0)
   -r ROW, --row ROW     Row index (starts at 0)
   -col COLOR, --color COLOR
-                        Color name```
+                        Color name
+```                        
