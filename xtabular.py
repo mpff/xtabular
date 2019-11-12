@@ -41,9 +41,33 @@ class LatexTable():
         '''Adds \cellcolor{color} to specified cell.'''
 
         if row > self.nrows or col > self.ncols:
-            raise Exception("Cell indices are outside the table size.")
+            raise Exception("Cell index out of range.")
 
         self.cells[row][col] = r'\cellcolor{' + color + '}' + self.cells[row][col]
+
+        return None
+
+    
+    def colorize_row(self, row, color):
+        '''Adds \\rowcolor{color} to start of specified row.'''
+
+        if row > self.nrows:
+            raise Exception("Row index out of range.")
+        
+        self.cells[row][0] = r'\rowcolor{' + color + '}' + self.cells[row][0]
+
+        return None
+
+
+    def colorize_column(self, col, color):
+        '''Adds >{\columncolor{color}} to specified column.'''
+
+        if col > self.ncols:
+            raise Exception("Column index out of range.")
+
+        pargs = [[i,arg] for i,arg in enumerate(self.pos_args) if arg not in ['|','||']]
+        parg = pargs[col]
+        self.pos_args[parg[0]] = r'>{\columncolor{' + color + '}}' + self.pos_args[parg[0]]
 
         return None
 
@@ -127,7 +151,17 @@ class LatexTable():
 
 def main():
 
-    parser = argparse.ArgumentParser(description='This is a simple python script to colorize LaTex tables.')
+    parser = argparse.ArgumentParser(
+        description=("This is a simple python script to colorize LaTex tables. "
+                     "It uses the xcolor and colortbl LaTeX packages. Import "
+                     "them by adding '\\usepackage{xcolor, colortbl}' to your "
+                     "LaTeX document. "
+                     "You can use this script to color whole rows, whole "
+                     "columns or a single cell, by specifying either the row "
+                     "'-r', the column '-c' or both arguments.")
+    )
+                     
+    
 
     parser.add_argument(
             '-f','--file',
@@ -136,25 +170,39 @@ def main():
     )
 
     parser.add_argument(
-            '-i', '--index', 
-            nargs=2, type=int, metavar=('column','row'),
-            help='Cell index (starts at 0)',
-            required=True
+            '-c', '--column', type=int,
+            help='Colum index (starts at 0)',
+            required=False
     )
 
     parser.add_argument(
-            '-c', '--color',
-            help='Color name or hexcode',
+            '-r', '--row', type=int,
+            help='Row index (starts at 0)',
+            required=False
+    )
+
+    parser.add_argument(
+            '-col', '--color',
+            help='Color name',
             required=True
     )
 
-    args = parser.parse_args() 
+    args = parser.parse_args()
+
+    if args.row is None and args.column is None:
+        parser.error("At least one of --column and --row is required.")
 
     with open(args.file, 'r') as file:
         tex_table = file.read()
 
     table = LatexTable(tex_table)
-    table.colorize(args.index[1],args.index[0],args.color)
+
+    if args.row is None:
+        table.colorize_column(args.column,args.color)
+    elif args.column is None:
+        table.colorize_row(args.row,args.color)
+    else:
+        table.colorize(args.row,args.column,args.color)
 
     sys.stdout.write(table.to_tex())
 
