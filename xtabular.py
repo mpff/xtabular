@@ -130,7 +130,7 @@ class LatexTable():
         match = re.search(r"^\{[lcr|]*\}", table)
         if not match:
             raise Exception('Table has no or invalid positional arguments. Valid positional arguments are: c r l | ||.')
-        match = match[0]  # should only have one match!
+        match = match.group(0)  # should only have one match!
         match = match.replace("{", "")
         match = match.replace("}", "")
         match = re.findall(r"\|{2}|[lcr|]", match)
