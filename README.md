@@ -19,3 +19,8 @@ optional arguments:
   -col COLOR, --color COLOR
                         Color name
 ```                        
+
+#### Known Bugs: 
+* doesn't support '\hline, \vline, \cline' in the input table 
+* doesn't check if color input is valid
+* can't handle already colored columns in the input table (rows and cells work though)
